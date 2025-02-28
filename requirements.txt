@@ -4,3 +4,6 @@ scikit-learn
 sentence-transformers
 uvicorn
 fastapi
+transformers 
+torch 
+requests

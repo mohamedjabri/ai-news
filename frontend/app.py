@@ -3,6 +3,7 @@ import os
 import streamlit as st
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
+from backend.summarizer import summarize_text
 from backend.fetch_news import get_ai_news 
 from backend.recommender import get_related_articles 
 
@@ -50,7 +51,14 @@ if articles:
         st.subheader(article["title"])
         st.write(f"🗓️ **Published:** {article['published']}")
         st.write(f"**Source:** {article['source']}")
+        st.write("📝 **Original Summary:**")
         st.write(article["summary"])
+        summarize_key = f"summarize_{i}"
+        if st.button("✨ Summarize Using Bert", key=summarize_key):
+            summarized_text = summarize_text(article["summary"])  # Summarize on click
+            st.write("🔍 **AI-Generated Summary:**")
+            st.write(summarized_text)
+
         st.markdown(f"[Read more]({article['link']})", unsafe_allow_html=True)
 
         # Get related articles

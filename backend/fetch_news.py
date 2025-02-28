@@ -25,10 +25,12 @@ def get_ai_news(keyword=None):
             if source_counts[source_name] >= 5:
                 continue
 
+            full_summary = entry.summary if "summary" in entry else ""
+
             article = {
                 "title": entry.title,
                 "link": entry.link,
-                "summary": entry.summary if "summary" in entry else "",
+                "summary": full_summary,
                 "source": source_name,
                 "published": entry.published if "published" in entry else "Unknown date",
             }
