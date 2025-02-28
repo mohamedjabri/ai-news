@@ -8,10 +8,7 @@ from backend.fetch_news import get_ai_news, get_related_articles
 st.title("📰 AI News Recommender")
 st.write("Get the latest AI news articles from top sources!")
 
-# Add a search bar
 keyword = st.text_input("🔍 Search AI News by Keyword", "")
-
-# Fetch AI news
 articles = get_ai_news(keyword)
 
 if articles:
