@@ -1,4 +1,5 @@
 import feedparser
+import streamlit as st
 from collections import defaultdict
 
 # List of AI-related RSS feeds
@@ -9,6 +10,7 @@ RSS_FEEDS = [
     "https://www.technologyreview.com/feed/",  # MIT Tech Review (AI + Tech)
 ]
 
+@st.cache_data(ttl=3600)
 def get_ai_news(keyword=None):
     """Fetch AI-related news from RSS feeds and limit to 5 per source."""
     news_articles = []
