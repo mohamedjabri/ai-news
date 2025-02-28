@@ -1,6 +1,8 @@
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+import streamlit as st
 
+@st.cache_data(ttl=300)
 def get_related_articles(main_article, all_articles, top_n=3):
     """Finds related articles using TF-IDF similarity."""
     if not all_articles:

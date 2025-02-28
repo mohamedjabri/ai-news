@@ -10,7 +10,7 @@ RSS_FEEDS = [
     "https://www.technologyreview.com/feed/",  # MIT Tech Review (AI + Tech)
 ]
 
-@st.cache_data(ttl=3600)
+@st.cache_data(ttl=300)
 def get_ai_news(keyword=None):
     """Fetch AI-related news from RSS feeds and limit to 5 per source."""
     news_articles = []
