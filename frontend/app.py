@@ -54,7 +54,7 @@ if articles:
         st.write("📝 **Original Summary:**")
         st.write(article["summary"])
         summarize_key = f"summarize_{i}"
-        if st.button("✨ Summarize Using Bert", key=summarize_key):
+        if st.button("✨ Summarize Using Bart", key=summarize_key):
             summarized_text = summarize_text(article["summary"])  # Summarize on click
             st.write("🔍 **AI-Generated Summary:**")
             st.write(summarized_text)
