@@ -1,0 +1,6 @@
+streamlit
+feedparser
+scikit-learn
+sentence-transformers
+uvicorn
+fastapi
