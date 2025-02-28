@@ -3,7 +3,8 @@ import os
 import streamlit as st
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from backend.fetch_news import get_ai_news, get_related_articles 
+from backend.fetch_news import get_ai_news 
+from backend.recommender import get_related_articles 
 
 st.title("📰 AI News Recommender")
 st.write("Get the latest AI news articles from top sources!")
