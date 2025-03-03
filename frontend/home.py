@@ -13,6 +13,9 @@ st.write("Get the latest AI news articles from top sources!")
 if "favorites" not in st.session_state:
     st.session_state["favorites"] = set()  # Store favorite topics in session
 
+if "bookmarks" not in st.session_state:
+    st.session_state["bookmarks"] = []
+
 # Input for topic selection
 fav_topic = st.text_input("⭐ Add a favorite topic (e.g., LLMs, Robotics, NLP)")
 
@@ -48,6 +51,7 @@ articles = get_ai_news(keyword)
 
 if articles:
     for i, article in enumerate(articles):
+
         st.subheader(article["title"])
         st.write(f"🗓️ **Published:** {article['published']}")
         st.write(f"**Source:** {article['source']}")
@@ -68,6 +72,14 @@ if articles:
             st.write("🔗 **You might also like:**")
             for related in related_articles:
                 st.markdown(f"- [{related['title']}]({related['link']})")
+
+        # Bookmark button
+        if st.button(f"⭐ Bookmark", key=f"bookmark_{i}"):
+            if article not in st.session_state["bookmarks"]:
+                st.session_state["bookmarks"].append(article)
+                st.success("Saved to bookmarks!")
+            else:
+                st.error("Article already saved! Check Bookmark Page.")
 
         st.markdown("---")  # Separator
 
