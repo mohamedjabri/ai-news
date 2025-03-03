@@ -3,9 +3,40 @@ import os
 import streamlit as st
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
+from backend.auth import authenticate, load_users, save_users
 from backend.summarizer import summarize_text
 from backend.fetch_news import get_ai_news 
 from backend.recommender import get_related_articles 
+from backend.bookmarks import load_bookmarks, save_bookmarks
+
+
+if "user" not in st.session_state:
+    st.session_state["user"] = None
+
+st.sidebar.title("🔑 User Login")
+if st.session_state["user"]:
+    st.sidebar.write(f"👋 Welcome, {st.session_state['user']}!")
+    if st.sidebar.button("Logout"):
+        st.session_state["user"] = None
+else:
+    username = st.sidebar.text_input("Username")
+    password = st.sidebar.text_input("Password", type="password")
+    if st.sidebar.button("Login"):
+        if authenticate(username, password):
+            st.session_state["user"] = username
+            st.session_state["trigger_rerun"] = not st.session_state.get("trigger_rerun", False)
+        else:
+            st.sidebar.error("Invalid credentials!")
+
+# Register new users
+if st.sidebar.button("Create Account"):
+    users = load_users()
+    if username in users:
+        st.sidebar.error("Username already exists!")
+    else:
+        users[username] = password
+        save_users(users)
+        st.sidebar.success("Account created! Please log in.")
 
 st.title("📰 Daily AI News Recommender")
 st.write("Get the latest AI news articles from top sources!")
@@ -13,8 +44,10 @@ st.write("Get the latest AI news articles from top sources!")
 if "favorites" not in st.session_state:
     st.session_state["favorites"] = set()  # Store favorite topics in session
 
+# Load bookmarks from file
+bookmarks = load_bookmarks(st.session_state['user'])
 if "bookmarks" not in st.session_state:
-    st.session_state["bookmarks"] = []
+    st.session_state["bookmarks"] = bookmarks
 
 # Input for topic selection
 fav_topic = st.text_input("⭐ Add a favorite topic (e.g., LLMs, Robotics, NLP)")
@@ -75,8 +108,10 @@ if articles:
 
         # Bookmark button
         if st.button(f"⭐ Bookmark", key=f"bookmark_{i}"):
-            if article not in st.session_state["bookmarks"]:
-                st.session_state["bookmarks"].append(article)
+            if article["title"] not in st.session_state["bookmarks"]:
+                st.session_state["bookmarks"][article["title"]] = article
+                save_bookmarks(st.session_state['user'],
+                               st.session_state["bookmarks"]) 
                 st.success("Saved to bookmarks!")
             else:
                 st.error("Article already saved! Check Bookmark Page.")
